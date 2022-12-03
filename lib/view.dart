@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,9 +17,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   DateTime date = DateTime.now();
 
+  void getLocation()  async {
+    LocationPermission permission = await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position);
+
+  }
+
+
+
   @override
   void initState() {
     _tabController = TabController(length: 4, vsync: this);
+    getLocation();
     super.initState();
   }
 
@@ -66,26 +77,44 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 controller: _tabController,
                 children: [
                   Column(children: [
+                    const SizedBox(
+                      height: 25,
+                    ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(right: 150.0),
                       child: Text(date.toString()),
                     ),
                     const SizedBox(
-                      height: 50,
+                      height: 10,
                     ),
-                    const Text('Tokyo'),
-                    const Text('Japan'),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 290.0),
+                      child: Text('Tokyo', style: TextStyle(fontSize: 20),),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 300.0),
+                      child: Text('Japan'),
+                    ),
                     const SizedBox(
                       height: 50,
                     ),
-                    Text('data'),
-                    Container(
-                      height: 50,
-                      width: 90,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        shape: BoxShape.circle
+                    Center(
+                      child: Container(
+                        height: 280,
+                        width: 280,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle
+                        ),
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top:100.0, left: 240),
+                      child: FloatingActionButton(onPressed: () {},
+                      child: Icon(Icons.location_on),),
                     )
                   ]),
                   Column(children: [
