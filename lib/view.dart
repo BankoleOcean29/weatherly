@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import 'package:geolocator/geolocator.dart';
+import 'location.dart';
+import 'network.dart';
+import 'package:http/http.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -17,13 +19,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   DateTime date = DateTime.now();
 
-  void getLocation()  async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print(position);
-
-  }
-
 
 
   @override
@@ -31,6 +26,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 4, vsync: this);
     getLocation();
     super.initState();
+  }
+
+  void getLocation() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+  }
+
+  void getData() async {
+    void getWeatherData() async {
+      Response response = (Uri.https('https://api.openweathermap.org/data/2.5/weather?lat=${''}&lon={lon}&appid=${apiKey}')) as Response;
+    }
   }
 
   @override
@@ -89,7 +95,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     ),
                     const Padding(
                       padding: EdgeInsets.only(right: 290.0),
-                      child: Text('Tokyo', style: TextStyle(fontSize: 20),),
+                      child: Text(
+                        'Tokyo',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -106,15 +115,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         height: 280,
                         width: 280,
                         decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle
-                        ),
+                            color: Colors.red, shape: BoxShape.circle),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top:100.0, left: 240),
-                      child: FloatingActionButton(onPressed: () {},
-                      child: Icon(Icons.location_on),),
+                      padding: const EdgeInsets.only(top: 100.0, left: 240),
+                      child: FloatingActionButton(
+                        onPressed: () {},
+                        child: Icon(Icons.location_on),
+                      ),
                     )
                   ]),
                   Column(children: [
